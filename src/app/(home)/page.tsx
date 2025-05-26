@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Image } from "@imagekit/next";
 import { CarIcon, Plus, Search } from "lucide-react";
+import { FeaturedCars } from "./_components/featured-cars";
+import { Filters } from "./_components/filter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,8 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FeaturedCars } from "./_components/featured-cars";
-import { Filters } from "./_components/filter";
 
 type Props = {
   searchParams: { type: string; page: string };

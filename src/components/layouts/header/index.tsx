@@ -1,7 +1,7 @@
-import React from "react";
 import Link from "next/link";
-import AiSearch from "./ai-search";
-import SwitchTheme from "./switch-theme";
+import AiSearch from "./_components/ai-search";
+import HeaderAuth from "./_components/header-auth";
+import SwitchTheme from "./_components/switch-theme";
 
 type Props = {};
 
@@ -13,6 +13,7 @@ const Header = ({}: Props) => {
       </Link>
       <AiSearch />
       <SwitchTheme />
+      <HeaderAuth />
     </header>
   );
 };

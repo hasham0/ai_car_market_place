@@ -18,10 +18,10 @@
     "^next/(.*)$",
     "^@core/(.*)$",
     "<THIRD_PARTY_MODULES>",
-    "^@server/(.*)$",
-    "^@ui/(.*)$",
+    "^[./]",
+    "^@actions/(.*)$",
     "^@/(.*)$",
-    "^[./]"
+    "^@ui/(.*)$"
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,

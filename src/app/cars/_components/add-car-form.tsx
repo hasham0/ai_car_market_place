@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { CarFuelType, CarType, carTypes } from "@/constant/car";
+import { autoGenerateCar } from "@/lib/actions/ai-action";
+import { addNewCar } from "@/lib/actions/car-action";
 import { AddCarSchemaTS, addCarSchema } from "@/lib/zod";
 import { useImagesStore } from "@/zustand/provider/provider";
 
@@ -137,58 +139,58 @@ const AddCarForm = ({}: Props) => {
     localStorage.removeItem(STORAGE_KEY);
   }, [clearImages, reset]);
 
-  const onSubmit =
-    useCallback();
-    // async (data: AddCarSchemaTS) => {
-    //   const toastId = toast.loading("Adding new car listing...");
+  const onSubmit = useCallback(
+    async (data: AddCarSchemaTS) => {
+      const toastId = toast.loading("Adding new car listing...");
 
-    //   try {
-    //     setSubmitHandlerLoading(true);
-    //     //      await addNewCar(data);
-    //     toast.success("Car listing added successfully", {
-    //       id: toastId,
-    //     });
+      try {
+        setSubmitHandlerLoading(true);
+        await addNewCar(data);
+        toast.success("Car listing added successfully", {
+          id: toastId,
+        });
 
-    //     resetState();
-    //   } catch (error) {
-    //     if (error instanceof Error)
-    //       toast.error(error.message, {
-    //         id: toastId,
-    //       });
-    //     else
-    //       toast.error("Error adding car listing", {
-    //         id: toastId,
-    //       });
-    //   } finally {
-    //     setSubmitHandlerLoading(false);
-    //   }
-    // },
-    // [resetState, setSubmitHandlerLoading]
+        resetState();
+      } catch (error) {
+        if (error instanceof Error)
+          toast.error(error.message, {
+            id: toastId,
+          });
+        else
+          toast.error("Error adding car listing", {
+            id: toastId,
+          });
+      } finally {
+        setSubmitHandlerLoading(false);
+      }
+    },
+    [resetState, setSubmitHandlerLoading]
+  );
 
   const autoGenerateHandler = useCallback(async () => {
     try {
-      // if (!watch("name"))
-      //   return toast.error("Please enter a car name to generate images");
-      // setIsGenerateAILoading(true);
-      // // Generate Info
-      // //  const result = await autoGenerateCar(watch("name"));
-      // if (!result) {
-      //   toast.error("Failed to generate car details");
-      //   return;
-      // }
-      // setColors(result.colors);
-      // setFeatures(result.features);
-      // // set generated data to form state
-      // Object.entries(result).forEach(([key, value]) => {
-      //   if (key === "images") return;
-      //   if (key === "sellerImage") {
-      //     setValue("sellerImage", "/default-image.jpg");
-      //     return;
-      //   }
-      //   setValue(key as keyof AddCarSchema, value as string);
-      // });
-      // localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
-      // toast.success("Car details generated successfully");
+      if (!watch("name"))
+        return toast.error("Please enter a car name to generate images");
+      setIsGenerateAILoading(true);
+      // Generate Info
+      const result = await autoGenerateCar(watch("name"));
+      if (!result) {
+        toast.error("Failed to generate car details");
+        return;
+      }
+      setColors(result.colors);
+      setFeatures(result.features);
+      // set generated data to form state
+      Object.entries(result).forEach(([key, value]) => {
+        if (key === "images") return;
+        if (key === "sellerImage") {
+          setValue("sellerImage", "/default-image.jpg");
+          return;
+        }
+        setValue(key as keyof AddCarSchemaTS, value as string);
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
+      toast.success("Car details generated successfully");
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
       else toast.error("Failed to generate car details");

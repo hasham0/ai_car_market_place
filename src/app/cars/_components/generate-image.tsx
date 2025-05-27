@@ -125,12 +125,19 @@ const GenerateImage = ({}: Props) => {
       }
     } finally {
       setUploadLoader(false);
+      setImage({
+        base64Data: undefined,
+        name: undefined,
+      });
+      reset();
+      setTimeout(() => {
+        setProgress(0);
+      }, 1000);
     }
   };
 
   return (
     <div>
-      {" "}
       <h1 className="text-2xl font-bold">Generate Image</h1>
       <p className="text-muted-foreground">
         Use AI to generate an image of your dream car.
@@ -177,15 +184,13 @@ const GenerateImage = ({}: Props) => {
             {generatingLoader ? (
               <Skeleton className="flex h-96 w-full items-center justify-center rounded-lg" />
             ) : (
-              <>
-                <NextImage
-                  width={1000}
-                  height={1000}
-                  src={image?.base64Data ?? ""}
-                  alt="Generated Car"
-                  className="h-[25rem] w-full rounded-lg object-cover"
-                />
-              </>
+              <NextImage
+                width={1000}
+                height={1000}
+                src={image?.base64Data ?? ""}
+                alt="Generated Car"
+                className="h-[25rem] w-full rounded-lg object-cover"
+              />
             )}
           </div>
           <div className="flex justify-end gap-4 pt-4">

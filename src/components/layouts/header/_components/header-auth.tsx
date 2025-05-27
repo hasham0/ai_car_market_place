@@ -11,8 +11,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { auth, signOut } from "@/lib/auth";
 
-// import { Bookmarks } from "./bookmarks";
-
 type Props = {};
 const logout = async () => {
   "use server";

@@ -95,13 +95,13 @@ export default function Home({ searchParams }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Suspense
             fallback={<div className="h-48 animate-pulse bg-gray-200"></div>}
           >
             <FeaturedCars searchParams={searchParams} />
           </Suspense>
-        </div>
+        </div> */}
       </section>
 
       {/* Why Choose Us Section */}

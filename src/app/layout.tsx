@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ImageKitProvider } from "@imagekit/next";
 import { ThemeProvider } from "next-themes";
 import Header from "@/components/layouts/header";
+import ZustandProvider from "@/zustand/provider/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +33,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <ImageKitProvider urlEndpoint="https://ik.imagekit.io/i3lrfj83g">
-            <Header />
-            {children}
-          </ImageKitProvider>
-        </ThemeProvider>
+        <ZustandProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <ImageKitProvider urlEndpoint="https://ik.imagekit.io/i3lrfj83g">
+              <Header />
+              {children}
+            </ImageKitProvider>
+          </ThemeProvider>
+        </ZustandProvider>
       </body>
     </html>
   );

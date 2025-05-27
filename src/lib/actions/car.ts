@@ -4,7 +4,6 @@ const getCars = async ({}) => {};
 
 const findCar = async (description: string) => {};
 const bookmarkCar = async (carId: string) => {};
-const getBookmarkCars = async () => {
-  const cars = await getCars({});
-};
+const getBookmarkCars = async () => {};
+
 export { getCars, findCar, bookmarkCar, getBookmarkCars };

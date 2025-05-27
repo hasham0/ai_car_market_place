@@ -14,8 +14,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+export type SearchParams = Promise<{ type: string; page: string }>;
 type Props = {
-  searchParams: { type: string; page: string };
+  searchParams: SearchParams;
 };
 
 const features = [
@@ -33,7 +34,9 @@ const features = [
     description: "Every vehicle undergoes a rigorous inspection process",
   },
 ];
-export default function Home({ searchParams }: Props) {
+export default async function Home({ searchParams }: Props) {
+  const searchParamsData = await searchParams;
+
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
@@ -95,13 +98,13 @@ export default function Home({ searchParams }: Props) {
           </div>
         </div>
 
-        {/* <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Suspense
             fallback={<div className="h-48 animate-pulse bg-gray-200"></div>}
           >
-            <FeaturedCars searchParams={searchParams} />
+            <FeaturedCars searchParams={searchParamsData} />
           </Suspense>
-        </div> */}
+        </div>
       </section>
 
       {/* Why Choose Us Section */}

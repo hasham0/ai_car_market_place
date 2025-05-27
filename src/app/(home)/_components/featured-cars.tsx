@@ -7,6 +7,7 @@ import { getCars } from "@/lib/actions/car-action";
 type Props = {
   searchParams: { type: string; page: string };
 };
+
 export const FeaturedCars = async ({ searchParams }: Props) => {
   const page = Number(searchParams.page) || 1;
   const type = searchParams.type || "all";

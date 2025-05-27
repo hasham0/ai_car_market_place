@@ -3,8 +3,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ImageKitProvider } from "@imagekit/next";
-import { ThemeProvider } from "next-themes";
 import Header from "@/components/layouts/header";
+import { ThemeProvider } from "@/components/themes/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import ZustandProvider from "@/zustand/provider/provider";
 
@@ -30,12 +30,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ZustandProvider>
-          <ThemeProvider attribute="class" defaultTheme="light">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <ImageKitProvider urlEndpoint="https://ik.imagekit.io/i3lrfj83g">
               <Header />
               {children}

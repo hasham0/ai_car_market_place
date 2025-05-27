@@ -20,6 +20,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { generateImage } from "@/lib/actions/car-action";
+import { imagekitAuthenticator } from "@/lib/imagekit";
 import { GenerateImageSchemaTS, generateImageSchema } from "@/lib/zod";
 import { useImagesStore } from "@/zustand/provider/provider";
 
@@ -28,7 +29,13 @@ type Props = {};
 const GenerateImage = ({}: Props) => {
   const { addImage } = useImagesStore(useShallow((state) => state));
 
-  const [image, setImage] = useState<{ base64Data: string; name: string }>();
+  const [image, setImage] = useState<{
+    base64Data: string | undefined;
+    name: string | undefined;
+  }>({
+    base64Data: undefined,
+    name: undefined,
+  });
   const [uploadLoader, setUploadLoader] = useState(false);
   const [generatingLoader, setGeneratingLoader] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -37,6 +44,7 @@ const GenerateImage = ({}: Props) => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<GenerateImageSchemaTS>({
     defaultValues: {
       description: "",
@@ -66,56 +74,55 @@ const GenerateImage = ({}: Props) => {
   };
   const handleUpload = async () => {
     if (!image) return toast.error("No image to upload");
-
-    // let authParams;
-    // setUploadLoader(true);
+    let authParams;
+    setUploadLoader(true);
     try {
-      // authParams = await imagekitAuthenticator();
+      authParams = await imagekitAuthenticator();
     } catch (error) {
       console.error("Error authenticating with ImageKit", error);
       setUploadLoader(false);
       return;
     }
 
-    // const { signature, expire, token, publicKey } = authParams;
-    // console.log("ImageKit auth params:", authParams);
+    const { signature, expire, token, publicKey } = authParams;
+    console.log("ImageKit auth params:", authParams);
 
-    // try {
-    //   const uploadResponse = await upload({
-    //     signature,
-    //     expire,
-    //     token,
-    //     publicKey,
-    //     file: image.base64Data,
-    //     fileName: image.name,
-    //     folder: "cars",
-    //     onProgress: (event) => {
-    //       setProgress((event.loaded / event.total) * 100);
-    //     },
-    //     abortSignal: abortController.signal,
-    //   });
+    try {
+      const uploadResponse = await upload({
+        signature,
+        expire,
+        token,
+        publicKey,
+        file: image?.base64Data ?? "",
+        fileName: image?.name ?? "",
+        folder: "cars",
+        onProgress: (event) => {
+          setProgress((event.loaded / event.total) * 100);
+        },
+        abortSignal: abortController.signal,
+      });
 
-    //   console.log("Upload response:", uploadResponse);
+      console.log("Upload response:", uploadResponse);
 
-    //   if (!uploadResponse.filePath)
-    //     return toast.error("Failed to upload image");
-    //   addImage(uploadResponse.filePath);
+      if (!uploadResponse.filePath)
+        return toast.error("Failed to upload image");
+      addImage(uploadResponse.filePath);
 
-    //   toast.success("Image uploaded successfully");
+      toast.success("Image uploaded successfully");
     } catch (error) {
-      // // Handle specific error types provided by the ImageKit SDK.
-      // if (error instanceof ImageKitAbortError) {
-      //   console.error("Upload aborted:", error.reason);
-      // } else if (error instanceof ImageKitInvalidRequestError) {
-      //   console.error("Invalid request:", error.message);
-      // } else if (error instanceof ImageKitUploadNetworkError) {
-      //   console.error("Network error:", error.message);
-      // } else if (error instanceof ImageKitServerError) {
-      //   console.error("Server error:", error.message);
-      // } else {
-      //   // Handle any other errors that may occur.
-      //   console.error("Upload error:", error);
-      // }
+      // Handle specific error types provided by the ImageKit SDK.
+      if (error instanceof ImageKitAbortError) {
+        console.error("Upload aborted:", error.reason);
+      } else if (error instanceof ImageKitInvalidRequestError) {
+        console.error("Invalid request:", error.message);
+      } else if (error instanceof ImageKitUploadNetworkError) {
+        console.error("Network error:", error.message);
+      } else if (error instanceof ImageKitServerError) {
+        console.error("Server error:", error.message);
+      } else {
+        // Handle any other errors that may occur.
+        console.error("Upload error:", error);
+      }
     } finally {
       setUploadLoader(false);
     }
@@ -163,7 +170,7 @@ const GenerateImage = ({}: Props) => {
           {generatingLoader ? "Generating..." : "Generate Image"}
         </Button>
       </form>
-      {image && (
+      {image && image.base64Data && image.name && (
         <>
           <div className="mt-4">
             <h2 className="text-lg font-semibold">Generated Image</h2>
@@ -174,7 +181,7 @@ const GenerateImage = ({}: Props) => {
                 <NextImage
                   width={1000}
                   height={1000}
-                  src={image.base64Data}
+                  src={image?.base64Data ?? ""}
                   alt="Generated Car"
                   className="h-[25rem] w-full rounded-lg object-cover"
                 />
@@ -184,12 +191,13 @@ const GenerateImage = ({}: Props) => {
           <div className="flex justify-end gap-4 pt-4">
             <Button
               variant="outline"
-              onClick={() =>
+              onClick={() => {
                 setImage({
-                  base64Data: "",
-                  name: "",
-                })
-              }
+                  base64Data: undefined,
+                  name: undefined,
+                });
+                reset();
+              }}
             >
               Cancel
             </Button>

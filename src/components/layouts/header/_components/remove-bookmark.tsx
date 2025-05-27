@@ -1,5 +1,5 @@
 import RemoveBookmarkButton from "./button";
-import { bookmarkCar } from "@/lib/actions/car";
+import { bookmarkCar } from "@/lib/actions/car-action";
 
 type Props = {
   carId: string;

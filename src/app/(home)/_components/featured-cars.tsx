@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Image } from "@imagekit/next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getCars } from "@/lib/actions/car";
+import { getCars } from "@/lib/actions/car-action";
 
 type Props = {
   searchParams: { type: string; page: string };

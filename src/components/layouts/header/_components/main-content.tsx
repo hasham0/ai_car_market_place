@@ -3,7 +3,7 @@ import { Image } from "@imagekit/next";
 import RemoveBookmark from "./remove-bookmark";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getBookmarkCars } from "@/lib/actions/car";
+import { getBookmarkCars } from "@/lib/actions/car-action";
 
 type Props = {};
 

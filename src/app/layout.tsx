@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ImageKitProvider } from "@imagekit/next";
 import { ThemeProvider } from "next-themes";
 import Header from "@/components/layouts/header";
+import { Toaster } from "@/components/ui/sonner";
 import ZustandProvider from "@/zustand/provider/provider";
 
 const geistSans = Geist({
@@ -38,6 +39,7 @@ export default function RootLayout({
             <ImageKitProvider urlEndpoint="https://ik.imagekit.io/i3lrfj83g">
               <Header />
               {children}
+              <Toaster />
             </ImageKitProvider>
           </ThemeProvider>
         </ZustandProvider>

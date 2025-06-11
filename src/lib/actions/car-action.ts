@@ -1,9 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { unstable_cache as cache, revalidatePath } from "next/cache";
+import { Car, CarType, User } from "@prisma/client";
 import { auth } from "../auth";
 import { prisma } from "../prisma";
 import { AddCarSchemaTS } from "../zod";
+import { carTypes } from "@/constant/car";
 
 const generateImage = async (text: string, name: string) => {
   try {
@@ -47,7 +49,7 @@ const addNewCar = async (carData: AddCarSchemaTS) => {
 
   if (!authUser) throw new Error("User not authenticated");
 
-  const user = await prisma.user.findUnique({
+  const user: User | null = await prisma.user.findUnique({
     where: {
       email: authUser.email!,
     },
@@ -71,7 +73,7 @@ const addNewCar = async (carData: AddCarSchemaTS) => {
       fuelType,
     } = carData;
 
-    const car = await tx.car.create({
+    const car: Car = await tx.car.create({
       data: {
         name,
         brand,
@@ -151,20 +153,65 @@ const addNewCar = async (carData: AddCarSchemaTS) => {
 
     return car;
   });
-
-  console.log("Car added successfully");
   revalidatePath("/");
 };
-const getCars = async ({}) => {};
-const findCar = async (description: string) => {};
-const bookmarkCar = async (carId: string) => {};
-const getBookmarkCars = async () => {};
+
+const getAllCars = cache(
+  async () => {
+    const cars = await prisma.car.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return cars;
+  },
+  ["cars"],
+  { revalidate: 60 * 60 * 24 }
+);
+
+const getCars = cache(
+  async ({ page = 1, type = "all" }: { page?: number; type?: string }) => {
+    const limit = 8;
+    const offset = (page - 1) * limit;
+    const allowedTypes = type
+      .split(",")
+      .filter(Boolean)
+      .map((t) => t.toUpperCase()) as [];
+
+    const isValidType = allowedTypes.some(
+      (t) => carTypes.includes(t as CarType) || t === "all"
+    );
+    const cars = await prisma.car.findMany({
+      skip: offset,
+      take: limit,
+      where: {
+        ...(type !== "all" &&
+          isValidType && {
+            type: { in: allowedTypes },
+          }),
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return cars;
+  },
+  [],
+  {
+    revalidate: 60 * 60 * 24,
+  }
+);
+// const findCar = async (description: string) => {};
+// const bookmarkCar = async (carId: string) => {};
+// const getBookmarkCars = async () => {};
 
 export {
   addNewCar,
+  getAllCars,
   getCars,
-  findCar,
-  bookmarkCar,
-  getBookmarkCars,
+  // findCar,
+  // bookmarkCar,
+  // getBookmarkCars,
   generateImage,
 };

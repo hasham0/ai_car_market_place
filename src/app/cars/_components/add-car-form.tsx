@@ -368,8 +368,9 @@ const AddCarForm = ({}: Props) => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select fuel type" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent defaultValue={"GASOLINE"}>
                     <SelectItem value="GASOLINE">Gasoline</SelectItem>
+                    <SelectItem value="PETROL">Petrol</SelectItem>
                     <SelectItem value="DIESEL">Diesel</SelectItem>
                     <SelectItem value="ELECTRIC">Electric</SelectItem>
                     <SelectItem value="HYBRID">Hybrid</SelectItem>

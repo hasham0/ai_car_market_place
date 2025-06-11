@@ -41,7 +41,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ImageKitProvider urlEndpoint="https://ik.imagekit.io/i3lrfj83g">
+            <ImageKitProvider
+              urlEndpoint={`${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}`}
+            >
               <Header />
               {children}
               <Toaster />

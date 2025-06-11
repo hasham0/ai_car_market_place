@@ -61,7 +61,7 @@ model Car {
   isNew             Boolean?           @default(false)
   features          String[]
   location          String
-  fuelType          FuelType?          @default(PETROL)
+  fuelType          FuelType?          @default(GASOLINE)
   transmission      Transmission?      @default(MANUAL)
   savedBy           User[]             @relation("SavedCars")
   specification     CarSpecification?
@@ -167,6 +167,7 @@ enum CarType {
 }
 
 enum FuelType {
+  GASOLINE
   PETROL
   DIESEL
   ELECTRIC

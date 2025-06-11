@@ -36,11 +36,11 @@ export const FeaturedCars = async ({ searchParams }: Props) => {
             ${car.price.toLocaleString()}
           </p>
         </div>
-        <div className="mt-4 flex gap-2">
-          <Button className="w-full" asChild>
+        <div className="mt-4 flex max-w-full flex-col items-center justify-between gap-2 md:flex-row">
+          <Button className="w-full flex-1 md:w-auto" asChild>
             <Link href={`/cars/${car.id}`}>View Details</Link>
           </Button>
-          <Button variant="outline" className="w-full" asChild>
+          <Button className="w-full flex-1 md:w-auto" asChild>
             <Link href={`/contact/${car.id}`}>Contact Seller</Link>
           </Button>
         </div>

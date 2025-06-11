@@ -184,7 +184,7 @@ const AddCarForm = ({}: Props) => {
       Object.entries(result).forEach(([key, value]) => {
         if (key === "images") return;
         if (key === "sellerImage") {
-          setValue("sellerImage", "/default-image.jpg");
+          setValue("sellerImage", "/profile.png");
           return;
         }
         setValue(key as keyof AddCarSchemaTS, value as string);

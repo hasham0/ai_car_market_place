@@ -34,7 +34,7 @@ const CoverButtons = ({ savedBy, carId, userId }: Props) => {
   return (
     <div className="absolute top-4 right-4 flex gap-2">
       <Button
-        variant="outline"
+        variant="default"
         size="icon"
         onClick={() => copyToClipboard(`${window.location.href}`)}
       >
@@ -46,13 +46,13 @@ const CoverButtons = ({ savedBy, carId, userId }: Props) => {
           await bookmarkCar(carId);
         }}
       >
-        <Button variant="outline" size="icon">
+        <Button variant="default" size="icon">
           {isSaved ? (
             <>
-              <HeartIcon className="fill-primary h-5 w-5" />
+              <HeartIcon className="h-5 w-5 fill-rose-600" />
             </>
           ) : (
-            <HeartIcon className="h-5 w-5" />
+            <HeartIcon className="z-10 h-5 w-5 fill-none" />
           )}
         </Button>
       </form>

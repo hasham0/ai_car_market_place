@@ -7,12 +7,15 @@ import { prisma } from "../prisma";
 import {
   AddCarSchemaTS,
   ContactSellerSchemaTS,
+  addCarSchema,
   contactSellerSchema,
+  generateImageSchema,
 } from "../zod";
 import { carTypes } from "@/constant/car";
 
 const generateImage = async (text: string, name: string) => {
   try {
+    generateImageSchema.parse({ description: text, name });
     const encodedText = encodeURIComponent(text);
     const imagePath = `${name}.jpg`;
 
@@ -48,6 +51,7 @@ const generateImage = async (text: string, name: string) => {
 };
 
 const addNewCar = async (carData: AddCarSchemaTS) => {
+  addCarSchema.parse(carData);
   const session = await auth();
   const authUser = session?.user;
 
@@ -332,7 +336,6 @@ const bookmarkCar = async (carId: string) => {
   if (!car) throw new Error("Car not found");
 
   const isAlreadySaved = car.savedBy.some((item) => item.id === user.id);
-  console.log("Car saved by", isAlreadySaved);
 
   if (isAlreadySaved) {
     await prisma.car.update({

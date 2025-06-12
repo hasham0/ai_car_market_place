@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import Cover from "../_components/cover";
 import MainContent from "../_components/main-content";
 import Sidebar from "../_components/sidebar";

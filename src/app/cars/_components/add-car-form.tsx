@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { LucideWandSparkles, LucideX } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Image } from "@imagekit/next";
-import { LucideWandSparkles, LucideX } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useShallow } from "zustand/react/shallow";
@@ -184,7 +184,7 @@ const AddCarForm = ({}: Props) => {
       Object.entries(result).forEach(([key, value]) => {
         if (key === "images") return;
         if (key === "sellerImage") {
-          setValue("sellerImage", "/profile.png");
+          setValue("sellerImage", "/cars/profile.png");
           return;
         }
         setValue(key as keyof AddCarSchemaTS, value as string);

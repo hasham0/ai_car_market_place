@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { carFuelTypes, carTypes } from "@/constant/car";
 
+// Generate Image
 export const generateImageSchema = z.object({
   description: z
     .string()
@@ -10,6 +11,7 @@ export const generateImageSchema = z.object({
 
 export type GenerateImageSchemaTS = z.infer<typeof generateImageSchema>;
 
+// Add Car Schema
 export const addCarSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   brand: z.string().min(1, "Brand is required"),
@@ -56,3 +58,15 @@ export const addCarSchema = z.object({
 });
 
 export type AddCarSchemaTS = z.infer<typeof addCarSchema>;
+
+// Contact Seller Schema
+export const contactSellerSchema = z.object({
+  carId: z.string().nonempty("Car ID is required"),
+  content: z.string().nonempty("Message content is required"),
+  firstName: z.string().nonempty("First name is required"),
+  lastName: z.string().nonempty("Last name is required"),
+  email: z.string().email("Invalid email format").nonempty("Email is required"),
+  phone: z.string().nonempty("Phone number is required"),
+});
+
+export type ContactSellerSchemaTS = z.infer<typeof contactSellerSchema>;

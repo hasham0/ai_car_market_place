@@ -9,6 +9,7 @@ const RemoveBookmark = async ({ carId }: Props) => {
   return (
     <form
       action={async () => {
+        "use server";
         await bookmarkCar(carId);
       }}
     >

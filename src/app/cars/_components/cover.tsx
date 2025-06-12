@@ -15,6 +15,7 @@ const Cover = async ({ params }: Props) => {
 
   const session = await auth();
   const user = await getMyProfile(session?.user?.email);
+
   return car.images.length > 0 ? (
     <>
       <Image

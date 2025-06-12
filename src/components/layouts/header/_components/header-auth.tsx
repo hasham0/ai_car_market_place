@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Image } from "@imagekit/next";
 import { LogOutIcon } from "lucide-react";
+import { Image } from "@imagekit/next";
 import Bookmarks from "./bookmarks";
 import { Button } from "@/components/ui/button";
 import {

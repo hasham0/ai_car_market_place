@@ -177,6 +177,35 @@ const getAllCars = cache(
   ["cars"],
   { revalidate: 60 * 60 * 24 }
 );
+const getSearchCarByTextOrPrice = cache(
+  async ({
+    searchTerm,
+    priceRange,
+  }: {
+    searchTerm?: string;
+    priceRange?: string;
+  }) => {
+    const cars = await prisma.car.findMany({
+      where: {
+        OR: [
+          { name: { contains: searchTerm, mode: "insensitive" } },
+          { brand: { contains: searchTerm, mode: "insensitive" } },
+          { description: { contains: searchTerm, mode: "insensitive" } },
+        ],
+        ...(priceRange && {
+          price: {
+            gte: parseInt(priceRange.split("-")[0]),
+            lte: parseInt(priceRange.split("-")[1]),
+          },
+        }),
+      },
+    });
+
+    return cars;
+  },
+  ["search", "cars"],
+  { revalidate: 60 * 60 * 24 }
+);
 
 const getCars = cache(
   async ({ page = 1, type = "all" }: { page?: number; type?: string }) => {
@@ -417,6 +446,7 @@ export {
   generateImage,
   addNewCar,
   getAllCars,
+  getSearchCarByTextOrPrice,
   getCars,
   getCarById,
   getSellerInfo,

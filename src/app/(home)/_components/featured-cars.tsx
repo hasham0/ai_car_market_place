@@ -11,7 +11,6 @@ type Props = {
 export const FeaturedCars = async ({ searchParams }: Props) => {
   const page = Number(searchParams.page) || 1;
   const type = searchParams.type || "all";
-
   const cars = await getCars({ page, type });
 
   return cars.map((car) => (

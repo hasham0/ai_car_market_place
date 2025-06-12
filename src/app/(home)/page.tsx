@@ -1,18 +1,11 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { CarIcon, Plus } from "lucide-react";
 import { Image } from "@imagekit/next";
-import { CarIcon, Plus, Search } from "lucide-react";
 import { FeaturedCars } from "./_components/featured-cars";
 import { Filters } from "./_components/filter";
+import PriceRangeFilterAndSearch from "./_components/price-range-filter";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 export type SearchParams = Promise<{ type: string; page: string }>;
 type Props = {
@@ -58,28 +51,7 @@ export default async function Home({ searchParams }: Props) {
           </p>
 
           {/* Search Bar */}
-          <div className="mx-auto max-w-4xl rounded-lg bg-white p-4 shadow-lg dark:bg-zinc-950">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-              <Input
-                placeholder="Search by make, model..."
-                className="md:col-span-2"
-              />
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Price Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0-10000">$0 - $10,000</SelectItem>
-                  <SelectItem value="10000-20000">$10,000 - $20,000</SelectItem>
-                  <SelectItem value="20000-30000">$20,000 - $30,000</SelectItem>
-                  <SelectItem value="30000+">$30,000+</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button className="w-full">
-                <Search className="mr-2 h-4 w-4" /> Search
-              </Button>
-            </div>
-          </div>
+          <PriceRangeFilterAndSearch />
         </div>
       </section>
 

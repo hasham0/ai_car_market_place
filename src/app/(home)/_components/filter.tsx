@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CheckedState } from "@radix-ui/react-checkbox";
 import { Filter } from "lucide-react";
+import { CheckedState } from "@radix-ui/react-checkbox";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,41 +18,33 @@ export const Filters = () => {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
   const handleCheckChange = (type: string, change: CheckedState) => {
+    if (!type) return;
     const newTypes = change
       ? [...activeFilters, type]
       : activeFilters.filter((t) => t !== type);
-
     setActiveFilters(newTypes);
   };
 
   useEffect(() => {
-    const query = window.location.href.split("?")?.[1];
-    const queries = query?.split("&") || [];
-    const carTypeQuery = queries.find((q) => q.startsWith("type="));
-    const carTypes = carTypeQuery ? carTypeQuery.split("=")[1].split(",") : [];
-
-    setActiveFilters(carTypes.map((t) => t.toUpperCase()));
+    const params = new URLSearchParams(window.location.search);
+    const types = params.get("type")?.split(",") || [];
+    setActiveFilters(types.map((t) => t.toUpperCase()));
   }, []);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const query = window.location.href.split("?")?.[1];
-      const queries = query?.split("&") || [];
-      const newQuery =
-        queries.length > 0
-          ? queries.map((q) => {
-              if (q.startsWith("type=")) {
-                return `type=${activeFilters.join(",")}`;
-              }
-              return q;
-            })
-          : [`type=${activeFilters.join(",")}`];
-      router.push(`?${newQuery.join("&")}`);
-    }, 800); // 0.8 second delay
+      const params = new URLSearchParams(window.location.search);
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
+      if (activeFilters.length > 0) {
+        params.set("type", activeFilters.join(","));
+      } else {
+        params.delete("type");
+      }
+
+      router.push(`?${params.toString()}`);
+    }, 800);
+
+    return () => clearTimeout(timeoutId);
   }, [activeFilters, router]);
 
   return (
@@ -70,7 +62,7 @@ export const Filters = () => {
               <Checkbox
                 id={i}
                 onCheckedChange={(change) => handleCheckChange(i, change)}
-                checked={activeFilters.includes(i)}
+                checked={activeFilters?.includes(i)}
               />
               <label
                 htmlFor={i}

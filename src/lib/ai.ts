@@ -16,7 +16,6 @@ class AIService {
       useSearchGrounding: true,
     });
   }
-  generativeAI = async () => {};
   generateCarAgent = async (carName: string) => {
     const modifiedSchema = zodSchema(addCarSchema).jsonSchema;
     const { text } = await generateText({

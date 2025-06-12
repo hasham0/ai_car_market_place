@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Shield } from "lucide-react";
@@ -14,8 +13,8 @@ const Sidebar = async ({ params }: Props) => {
   if (!params.id) return notFound();
 
   const seller = await getSellerInfo(params.id);
-
   if (!seller) return notFound();
+
   return (
     <Card className="sticky top-4">
       <CardContent className="p-6">
